@@ -11,3 +11,6 @@ struct elephant ee[] = {
         {"Hathy",  42, 6.9},
         {"Kitty",  10, 3}
 };
+//
+// Created by keshe4ka on 16.06.2021.
+//

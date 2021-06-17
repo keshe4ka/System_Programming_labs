@@ -54,3 +54,6 @@ char *curtime() {
     sprintf(ts, "%s.%03ld", ts1, ms);
     return ts;
 }
+//
+// Created by keshe4ka on 16.06.2021.
+//
