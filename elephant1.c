@@ -13,7 +13,7 @@
 static struct elephant this;
 
 int main(int an, char *av[]) {
-    strcpy(this.name, av[0]);
+    sscanf(av[0], "%s", &(this.name));
     sscanf(av[1], "%d", &(this.age));
     sscanf(av[2], "%lf", &(this.weight));
     srand(time(NULL));

@@ -15,13 +15,13 @@
 #include "herd.h"
 
 struct s_elephant {
-    struct elephant *el; // указатель
+    struct elephant *elphnt; // указатель
     int priority; // приоритет
     pid_t s_pid; // id
 };
 
 int main(int argc, char *argv[]) {
-    struct s_elephant i_els[NE]; // информация о слонах
+    struct s_elephant s_elephants[NE]; // информация о слонах
     char file_name[] = "./elephant1"; // имя файла со слонами
     int stat;  // состояние процесса
     char e_age[20], e_weight[20];
@@ -32,32 +32,32 @@ int main(int argc, char *argv[]) {
 
     int i;
     for (i = 0; i < NE; i++) {
-        i_els[i].el = &ee[i];
-        sprintf(e_age, "%d", i_els[i].el->age);
-        sprintf(e_weight, "%lf", i_els[i].el->weight);
+        s_elephants[i].elphnt = &ee[i];
+        sprintf(e_age, "%d", s_elephants[i].elphnt->age);
+        sprintf(e_weight, "%lf", s_elephants[i].elphnt->weight);
         pid = fork();
         if (pid == 0) {
-            execl(file_name, i_els[i].el->name, e_age, e_weight, NULL);
+            execl(file_name, s_elephants[i].elphnt->name, e_age, e_weight, NULL);
             exit(0);
         }
-        i_els[i].priority = (int) (10. * rand() / RAND_MAX);
-        setpriority(PRIO_PROCESS, pid, i_els[i].priority);
-        i_els[i].s_pid = pid;
+        s_elephants[i].priority = (int) (10. * rand() / RAND_MAX);
+        setpriority(PRIO_PROCESS, pid, s_elephants[i].priority);
+        s_elephants[i].s_pid = pid;
     }
-    a0wait(10);
-    printf("\n"); // тут была попытка поставить вовремя новую строку
-    sleep(10);
+    sleep(1);
+    printf("\n"); // разделение строк
+    sleep(30);
     printf("\n");
     for (i = 0; i < NE; i++) {
-        pid = waitpid(i_els[i].s_pid, &stat, WNOHANG);
-        if (i_els[i].s_pid == pid) {
+        pid = waitpid(s_elephants[i].s_pid, &stat, WNOHANG);
+        if (s_elephants[i].s_pid == pid) {
             printf("%s - Elephant %s survived\n",
-                   curtime(), i_els[i].el->name);
+                   curtime(), s_elephants[i].elphnt->name);
         } else {
-            kill(i_els[i].s_pid, SIGKILL);
-            waitpid(i_els[i].s_pid, &stat, 0);
+            kill(s_elephants[i].s_pid, SIGKILL);
+            waitpid(s_elephants[i].s_pid, &stat, 0);
             printf("%s - Elephant %s died heroically\n",
-                   curtime(), i_els[i].el->name);
+                   curtime(), s_elephants[i].elphnt->name);
         }
     }
 }
